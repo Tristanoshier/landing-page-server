@@ -4,6 +4,29 @@ const Admin = require('../db').import('../models/admin');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+router.post('/signup', (req, res) => { 
+    Admin.create({
+           username: req.body.username,
+           password: bcrypt.hashSync(req.body.password, 10)
+        })
+       .then(createSuccess = (admin) => {
+                let token = jwt.sign({
+                        id: admin.id
+                    },
+                    process.env.JWT_SECRET, {
+                        expiresIn: 60 * 60 * 24
+                    });
+                res.json({
+                    admin: admin,
+                    message: 'place of living created',
+                    sessionToken: token
+                });
+            },
+            createError = err => res.send(500, err)
+        );
+});
+
+
 router.post('/login', (req, res) => {
     Admin.findOne({
             where: {

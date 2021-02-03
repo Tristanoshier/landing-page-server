@@ -1,4 +1,3 @@
-require('dotenv').config();
 const router = require('express').Router();
 const Post = require('../db').import('../models/post');
 
@@ -8,20 +7,10 @@ router.post('/create', (req, res) => {
         title: req.body.title,
         body: req.body.body,
         topic: req.body.topic,
-        date: req.body.date,
         adminId: req.admin.id
     };
     Post.create(post)
         .then(postInfo => res.status(200).json(postInfo))
-        .catch(err => res.status(500).json({
-            error: err
-        }));
-});
-
-// GET
-router.get('/', (req, res) =>{
-    Post.findAll()
-        .then(posts => res.status(200).json(posts))
         .catch(err => res.status(500).json({
             error: err
         }));
