@@ -7,7 +7,8 @@ const app = express();
 // controller imports
 const admin = require('./controllers/admin.controller');
 const post = require('./controllers/post.controller');
-const site = require('./controllers/site.controller')
+const site = require('./controllers/site.controller');
+const project = require('./controllers/project.controller')
 
 // db import and sync
 const sequelize = require('./db');
@@ -24,6 +25,7 @@ app.use('/admin', admin);
 app.use('/site', site);
 app.use(require('./middleware/validate-session'));
 app.use('/post', post);
+app.use('/project', project);
 
 
 app.listen(process.env.PORT, () => console.log('app is listening on port 3001'));

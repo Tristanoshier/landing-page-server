@@ -2,7 +2,10 @@ const router = require('express').Router();
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 const Post = require('../db').import('../models/post');
+const Project = require('../db').import('../models/project');
 
+
+// Posts
 router.get('/', (req, res) => {
     Post.findAll()
         .then(posts => res.status(200).json(posts))
@@ -11,7 +14,6 @@ router.get('/', (req, res) => {
         }));
 });
 
-// GET
 router.get('/interests', (req, res) => {
     Post.findAll({
             where: {
@@ -33,6 +35,15 @@ router.get('/blog', (req, res) => {
             }
         })
         .then(posts => res.status(200).json(posts))
+        .catch(err => res.status(500).json({
+            error: err
+        }));
+});
+
+//Projects
+router.get('/projects', (req, res) => {
+    Project.findAll()
+        .then(projectInfo => res.status(200).json(projectInfo))
         .catch(err => res.status(500).json({
             error: err
         }));

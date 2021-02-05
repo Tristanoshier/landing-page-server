@@ -12,10 +12,15 @@ sequelize.authenticate()
 // model imports
 Admin = sequelize.import('./models/admin');
 Post = sequelize.import('./models/post');
+Project = sequelize.import('./models/project');
 
 // db table associations 
 Admin.hasMany(Post);
 Post.belongsTo(Admin);
+
+Admin.hasMany(Project);
+Project.belongsTo(Admin);
+
 
 module.exports = sequelize;
 

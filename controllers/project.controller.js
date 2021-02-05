@@ -1,16 +1,16 @@
 const router = require('express').Router();
-const Post = require('../db').import('../models/post');
+const Project = require('../db').import('../models/project');
 
 // POST
 router.post('/create', (req, res) => {
-    const post = {
+    const project = {
         title: req.body.title,
-        body: req.body.body,
-        topic: req.body.topic,
+        description: req.body.description,
+        link: req.body.link,
         adminId: req.admin.id
     };
-    Post.create(post)
-        .then(postInfo => res.status(200).json(postInfo))
+    Project.create(project)
+        .then(projectInfo => res.status(200).json(projectInfo))
         .catch(err => res.status(500).json({
             error: err
         }));
@@ -18,22 +18,22 @@ router.post('/create', (req, res) => {
 
 // UPDATE
 router.put('/update/:id', (req, res) => {
-    Post.update(req.body, {
+    Project.update(req.body, {
             where: {
                 id: req.params.id
             }
         })
-        .then(postInfo => res.status(200).json(postInfo))
+        .then(projectInfo => res.status(200).json(projectInfo))
         .catch(() => res.json(req.errors))
 });
 
 // DELETE
 router.delete('/delete/:id', (req, res) => {
-    Post.destroy({
+    Project.destroy({
             where: {
                 id: req.params.id
             }
-        }).then(postInfo => res.status(200).json(postInfo))
+        }).then(projectInfo => res.status(200).json(projectInfo))
         .catch(err => res.json({
             error: err
         }));
