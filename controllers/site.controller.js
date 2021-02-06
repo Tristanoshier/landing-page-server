@@ -7,7 +7,11 @@ const Project = require('../db').import('../models/project');
 
 // Posts
 router.get('/', (req, res) => {
-    Post.findAll()
+    Post.findAll({
+      order: [
+          ['id', 'DESC']
+      ]
+    })
         .then(posts => res.status(200).json(posts))
         .catch(err => res.status(500).json({
             error: err
@@ -20,7 +24,10 @@ router.get('/interests', (req, res) => {
                 topic: {
                     [Op.ne]: 'blog'
                 }
-            }
+            },
+            order: [
+                ['createdAt', 'DESC']
+            ]
         })
         .then(posts => res.status(200).json(posts))
         .catch(err => res.status(500).json({
