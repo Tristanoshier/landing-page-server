@@ -39,7 +39,10 @@ router.get('/blog', (req, res) => {
     Post.findAll({
             where: {
                 topic: 'blog'
-            }
+            },
+            order: [
+                ['createdAt', 'DESC']
+            ]
         })
         .then(posts => res.status(200).json(posts))
         .catch(err => res.status(500).json({
