@@ -5,6 +5,7 @@ const Project = require('../db').import('../models/project');
 router.post('/create', (req, res) => {
     const project = {
         title: req.body.title,
+        languages: req.body.languages,
         description: req.body.description,
         link: req.body.link,
         adminId: req.admin.id
