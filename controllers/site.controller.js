@@ -18,7 +18,8 @@ router.get('/', (req, res) => {
         }));
 });
 
-router.get('/interests', (req, res) => {
+// temp route until infinite scroll is working on search
+router.get('/interests/search', (req, res) => {
     Post.findAll({
             where: {
                 topic: {
@@ -35,6 +36,32 @@ router.get('/interests', (req, res) => {
         }));
 });
 
+router.get('/interests', (req, res) => {
+    Post.findAll({
+            where: {
+                topic: {
+                    [Op.ne]: 'blog'
+                }
+            },
+            order: [
+                ['createdAt', 'DESC']
+            ]
+        })
+        .then(posts => {
+            const page = req.query.page;
+            const limit = req.query.limit;
+
+            const startIndex = (page - 1) * limit;
+            const endIndex = page * limit;
+            
+            const results = posts.slice(startIndex, endIndex);
+            res.status(200).json(results)
+        })
+        .catch(err => res.status(500).json({
+            error: err
+        }));
+});
+
 router.get('/blog', (req, res) => {
     Post.findAll({
             where: {
@@ -44,7 +71,16 @@ router.get('/blog', (req, res) => {
                 ['createdAt', 'DESC']
             ]
         })
-        .then(posts => res.status(200).json(posts))
+        .then(posts =>  {
+            const page = req.query.page;
+            const limit = req.query.limit;
+
+            const startIndex = (page - 1) * limit;
+            const endIndex = page * limit;
+            
+            const results = posts.slice(startIndex, endIndex);
+            res.status(200).json(results)
+        })
         .catch(err => res.status(500).json({
             error: err
         }));
