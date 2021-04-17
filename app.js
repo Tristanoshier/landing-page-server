@@ -21,11 +21,11 @@ app.use(express.json());
 app.use(require('./middleware/headers'));
 
 // routes
-app.use('/admin', admin);
 app.use('/site', site);
+app.use('/admin', admin);
 app.use(require('./middleware/validate-session'));
 app.use('/post', post);
 app.use('/project', project);
 
 
-app.listen(process.env.PORT, () => console.log('app is listening on port 3001'));
+app.listen(process.env.PORT, () => console.log('connected'));

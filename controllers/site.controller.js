@@ -4,7 +4,6 @@ const Op = Sequelize.Op;
 const Post = require('../db').import('../models/post');
 const Project = require('../db').import('../models/project');
 
-
 // Posts
 router.get('/', (req, res) => {
     Post.findAll({
@@ -86,7 +85,7 @@ router.get('/blog', (req, res) => {
         }));
 });
 
-//Projects
+// Projects
 router.get('/projects', (req, res) => {
     Project.findAll()
         .then(projectInfo => res.status(200).json(projectInfo))
