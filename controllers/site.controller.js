@@ -18,7 +18,7 @@ router.get('/', (req, res) => {
         }));
 });
 
-// temp route until infinite scroll is working on search
+
 router.get('/interests/search', (req, res) => {
     Post.findAll({
             where: {
