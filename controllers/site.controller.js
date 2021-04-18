@@ -7,10 +7,10 @@ const Project = require('../db').import('../models/project');
 // Posts
 router.get('/', (req, res) => {
     Post.findAll({
-      order: [
-          ['id', 'DESC']
-      ]
-    })
+            order: [
+                ['id', 'DESC']
+            ]
+        })
         .then(posts => res.status(200).json(posts))
         .catch(err => res.status(500).json({
             error: err
@@ -52,7 +52,7 @@ router.get('/interests', (req, res) => {
 
             const startIndex = (page - 1) * limit;
             const endIndex = page * limit;
-            
+
             const results = posts.slice(startIndex, endIndex);
             res.status(200).json(results)
         })
@@ -70,13 +70,13 @@ router.get('/blog', (req, res) => {
                 ['createdAt', 'DESC']
             ]
         })
-        .then(posts =>  {
+        .then(posts => {
             const page = req.query.page;
             const limit = req.query.limit;
 
             const startIndex = (page - 1) * limit;
             const endIndex = page * limit;
-            
+
             const results = posts.slice(startIndex, endIndex);
             res.status(200).json(results)
         })
@@ -87,8 +87,11 @@ router.get('/blog', (req, res) => {
 
 // Projects
 router.get('/projects', (req, res) => {
-    Project.findAll()
-        .then(projectInfo => res.status(200).json(projectInfo))
+    Project.findAll({
+            order: [
+                ['id', 'DESC']
+            ]
+        }).then(projectInfo => res.status(200).json(projectInfo))
         .catch(err => res.status(500).json({
             error: err
         }));
