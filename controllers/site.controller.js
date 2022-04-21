@@ -20,11 +20,6 @@ router.get('/', (req, res) => {
 
 router.get('/interests/search', (req, res) => {
     Post.findAll({
-            where: {
-                topic: {
-                    [Op.ne]: 'blog'
-                }
-            },
             order: [
                 ['createdAt', 'DESC']
             ]
