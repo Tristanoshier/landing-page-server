@@ -1,11 +1,17 @@
 const router = require('express').Router();
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
-const Post = require('../db').import('../models/post');
-const Project = require('../db').import('../models/project');
+const {
+    Post,
+    Project,
+    Images
+} = require('../models');
+
+const postFavoriteTitles = ['Should You Go to College for Computer Science?', 'A flame my love, a frequency - Colleen', 'Moving from Indiana to NYC'];
+const projectFavoriteTitles = ['Code Databank', 'Black Lives Matter Resources', 'sample project 3'];
 
 // Posts
-router.get('/', (req, res) => {
+router.get('/posts', (req, res) => {
     Post.findAll({
             order: [
                 ['id', 'DESC']
@@ -17,6 +23,26 @@ router.get('/', (req, res) => {
         }));
 });
 
+router.get('/post/favorites', (req, res) => {
+    Post.findAll({
+            where: {
+                [Op.or]: [{
+                        title: postFavoriteTitles[0]
+                    },
+                    {
+                        title: postFavoriteTitles[1]
+                    },
+                    {
+                        title: postFavoriteTitles[2]
+                    },
+                ]
+            }
+        })
+        .then(posts => res.status(200).json(posts))
+        .catch(err => res.status(500).json({
+            error: err
+        }));
+});
 
 router.get('/interests/search', (req, res) => {
     Post.findAll({
@@ -25,6 +51,31 @@ router.get('/interests/search', (req, res) => {
             ]
         })
         .then(posts => res.status(200).json(posts))
+        .catch(err => res.status(500).json({
+            error: err
+        }));
+});
+
+
+router.get('/blog', (req, res) => {
+    Post.findAll({
+            where: {
+                topic: 'blog'
+            },
+            order: [
+                ['createdAt', 'DESC']
+            ]
+        })
+        .then(posts => {
+            const page = req.query.page;
+            const limit = req.query.limit;
+
+            const startIndex = (page - 1) * limit;
+            const endIndex = page * limit;
+
+            const results = posts.slice(startIndex, endIndex);
+            res.status(200).json(results)
+        })
         .catch(err => res.status(500).json({
             error: err
         }));
@@ -56,36 +107,44 @@ router.get('/interests', (req, res) => {
         }));
 });
 
-router.get('/blog', (req, res) => {
-    Post.findAll({
+router.get('/projects/images', (req, res) => {
+    Images.findAll()
+    .then(images => res.status(200).json(images))
+        .catch(err => res.status(500).json({
+            error: err
+        }));
+})
+
+// Projects
+router.get('/projects/favorites', (req, res) => {
+    Project.findAll({
             where: {
-                topic: 'blog'
+                [Op.or]: [{
+                        title: projectFavoriteTitles[0]
+                    },
+                    {
+                        title: projectFavoriteTitles[1]
+                    },
+                    {
+                        title: projectFavoriteTitles[2]
+                    },
+                ]
             },
-            order: [
-                ['createdAt', 'DESC']
-            ]
+            include: Images
         })
-        .then(posts => {
-            const page = req.query.page;
-            const limit = req.query.limit;
-
-            const startIndex = (page - 1) * limit;
-            const endIndex = page * limit;
-
-            const results = posts.slice(startIndex, endIndex);
-            res.status(200).json(results)
-        })
+        .then(posts => res.status(200).json(posts))
         .catch(err => res.status(500).json({
             error: err
         }));
 });
 
-// Projects
 router.get('/projects', (req, res) => {
     Project.findAll({
+            include: Images,
             order: [
                 ['id', 'DESC']
-            ]
+            ],
+
         }).then(projectInfo => res.status(200).json(projectInfo))
         .catch(err => res.status(500).json({
             error: err

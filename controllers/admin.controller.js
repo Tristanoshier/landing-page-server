@@ -1,6 +1,6 @@
 require('dotenv').config();
 const router = require('express').Router();
-const Admin = require('../db').import('../models/admin');
+const { Admin } = require('../models');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -18,7 +18,7 @@ router.post('/signup', (req, res) => {
                     });
                 res.json({
                     admin: admin,
-                    message: 'place of living created',
+                    message: 'admin user created',
                     sessionToken: token
                 });
             },

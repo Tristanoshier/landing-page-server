@@ -2,6 +2,7 @@ require('dotenv').config();
 
 // express
 const express = require('express');
+const db = require('./db');
 const app = express();
 
 // controller imports
@@ -9,11 +10,6 @@ const admin = require('./controllers/admin.controller');
 const post = require('./controllers/post.controller');
 const site = require('./controllers/site.controller');
 const project = require('./controllers/project.controller')
-
-// db import and sync
-const sequelize = require('./db');
-sequelize.sync();
-// sequelize.sync({ force: true }); 
 
 app.use(express.json());
 
@@ -28,4 +24,13 @@ app.use('/post', post);
 app.use('/project', project);
 
 
-app.listen(process.env.PORT, () => console.log('connected'));
+db.authenticate()
+  .then(() => db.sync())
+  .then(() => {
+    app.listen(process.env.PORT, () =>
+      console.log(`Server listening on port ${process.env.PORT}`)
+    );
+  })
+  .catch((err) => {
+    console.log(err);
+  });
