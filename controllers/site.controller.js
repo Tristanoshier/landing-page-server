@@ -8,7 +8,7 @@ const {
 } = require('../models');
 
 const postFavoriteTitles = ['Experiencing Burnout', 'A flame my love, a frequency - Colleen', 'Moving from Indiana to NYC'];
-const projectFavoriteTitles = ['Code Databank', 'Sample shop for an artist', 'Portfolio website for college graduate'];
+const projectFavoriteTitles = ['Code Databank', 'Sample shop for an artist', 'Portfolio website for a college graduate'];
 
 // Posts
 router.get('/posts', (req, res) => {
